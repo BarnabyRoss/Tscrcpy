@@ -17,19 +17,23 @@ void Widget::onButtonClicked(){
 
   //QString program = "..\\Tscrcpy\\third_party\\adb\\winAdb\\adb.exe";
   QStringList arguments;
-  arguments << "devices" << "-l";
+  arguments << "devices";
 
   AdbProcess* process = new AdbProcess(this);
   //process->start(program, arguments);
   //process->start(AdbProcess::getAdbPath(), nullptr);
-  connect(process, &AdbProcess::adbProcessResult, this, [this](AdbProcess::ADB_EXEC_RESULT processResult){
+  connect(process, &AdbProcess::adbProcessResult, this, [this, process](AdbProcess::ADB_EXEC_RESULT processResult){
     qDebug() << ">>>>>>>>>>>" << processResult;
+    if( AdbProcess::AER_SUCCESS_EXEC == processResult ){
+      QStringList res = process->getDeviceSerialFromStdOut();
+      for(int i = 0; i < res.count(); ++i) qDebug() << res[i];
+    }
   });
-  //process->execute("", arguments);
+  process->execute("", arguments);
   //process->push("", "C:\\Users\\Lenovo\\Desktop\\test.txt", "/sdcard/test.txt");
   //process->removeFile("", "/sdcard/test.txt");
   //process->reverse("", "scrcpy", 5037);
-  process->removeReverse("", "scrcpy");
+  //process->removeReverse("", "scrcpy");
 }
 
 void Widget::onAdbProcessResult(AdbProcess::ADB_EXEC_RESULT processResult){

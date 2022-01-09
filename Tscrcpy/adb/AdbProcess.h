@@ -28,6 +28,7 @@ public:
   void removeFile(const QString& serial, const QString& filePath);
   void reverse(const QString& serial, const QString& deviceSocketName, qint16 localPort);
   void removeReverse(const QString& serial, const QString& deviceSocketName);
+  QStringList getDeviceSerialFromStdOut();
 
 private:
   void initSignals();
@@ -43,7 +44,9 @@ protected slots:
   void onReadyReadStandardOutput();
 
 private:
-  static QString m_adbPath;
+  static QString s_adbPath;
+  QString m_standardOutput;
+  QString m_errorOutput;
 };
 
 #endif // __ADBPROCESS_H__

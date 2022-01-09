@@ -1,11 +1,12 @@
 #include <QFileInfo>
 #include <QCoreApplication>
+#include <QRegExp>
 #include <QDebug>
 #include "AdbProcess.h"
 
-QString AdbProcess::m_adbPath = "";
+QString AdbProcess::s_adbPath = "";
 
-AdbProcess::AdbProcess(QObject* parent) : QProcess(parent){
+AdbProcess::AdbProcess(QObject* parent) : QProcess(parent), m_standardOutput(""), m_errorOutput(""){
 
   initSignals();
 
@@ -84,6 +85,23 @@ void AdbProcess::removeReverse(const QString& serial, const QString& deviceSocke
   execute(serial, args);
 }
 
+QStringList AdbProcess::getDeviceSerialFromStdOut(){
+
+  //"List of devices attached\r\n8LS8SOEQ99999999\tdevice"
+  QStringList serials;
+  QStringList deviceInfoList = m_standardOutput.split(QRegExp("\r\n|\n"), QString::SkipEmptyParts);
+  for(QString deviceInfo : deviceInfoList){
+
+    QStringList tmp = deviceInfo.split(QRegExp("\t"), QString::SkipEmptyParts);
+    if( tmp.count() == 2 && (tmp[1].compare("device") == 0) ){
+
+      serials << tmp[0];
+    }
+  }
+
+  return serials;
+}
+
 void AdbProcess::initSignals(){
 
   /*connect(this, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
@@ -133,10 +151,12 @@ void AdbProcess::onFinished(int exitCode, QProcess::ExitStatus exitStatus){
 
 void AdbProcess::onReadyReadStandardError(){
 
-  qDebug() << readAllStandardError();
+  m_errorOutput = QString::fromLocal8Bit(readAllStandardError()).trimmed();
+  qDebug() << m_errorOutput;
 }
 
 void AdbProcess::onReadyReadStandardOutput(){
 
-  qDebug() << readAllStandardOutput();
+  m_standardOutput = QString::fromLocal8Bit(readAllStandardOutput()).trimmed();
+  qDebug() << m_standardOutput;
 }
