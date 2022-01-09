@@ -1,3 +1,4 @@
+#include <QDebug>
 #include "Widget.h"
 #include "AdbProcess.h"
 
@@ -14,13 +15,26 @@ Widget::Widget(QWidget* parent) : QWidget(parent), m_button(this){
 
 void Widget::onButtonClicked(){
 
-  QString program = "..\\Tscrcpy\\third_party\\adb\\winAdb\\adb.exe";
+  //QString program = "..\\Tscrcpy\\third_party\\adb\\winAdb\\adb.exe";
   QStringList arguments;
-  //arguments << "..\\";
+  arguments << "devices" << "-l";
 
   AdbProcess* process = new AdbProcess(this);
   //process->start(program, arguments);
-  process->start(program, nullptr);
+  //process->start(AdbProcess::getAdbPath(), nullptr);
+  connect(process, &AdbProcess::adbProcessResult, this, [this](AdbProcess::ADB_EXEC_RESULT processResult){
+    qDebug() << ">>>>>>>>>>>" << processResult;
+  });
+  //process->execute("", arguments);
+  //process->push("", "C:\\Users\\Lenovo\\Desktop\\test.txt", "/sdcard/test.txt");
+  //process->removeFile("", "/sdcard/test.txt");
+  //process->reverse("", "scrcpy", 5037);
+  process->removeReverse("", "scrcpy");
+}
+
+void Widget::onAdbProcessResult(AdbProcess::ADB_EXEC_RESULT processResult){
+
+  qDebug() << ">>>>>>>>>>>" << processResult;
 }
 
 Widget::~Widget(){

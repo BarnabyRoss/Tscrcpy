@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QPushButton>
+#include "AdbProcess.h"
 
 class Widget : public QWidget{
 
@@ -14,6 +15,7 @@ public:
 
 protected slots:
   void onButtonClicked();
+  void onAdbProcessResult(AdbProcess::ADB_EXEC_RESULT processResult);
 
 private:
   QPushButton m_button;
