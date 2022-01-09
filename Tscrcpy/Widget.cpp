@@ -17,7 +17,8 @@ void Widget::onButtonClicked(){
 
   //QString program = "..\\Tscrcpy\\third_party\\adb\\winAdb\\adb.exe";
   QStringList arguments;
-  arguments << "devices";
+  //arguments << "devices";
+  arguments << "shell" << "ip" << "-f" << "inet" << "addr" << "show" << "wlan0";
 
   AdbProcess* process = new AdbProcess(this);
   //process->start(program, arguments);
@@ -27,13 +28,16 @@ void Widget::onButtonClicked(){
     if( AdbProcess::AER_SUCCESS_EXEC == processResult ){
       QStringList res = process->getDeviceSerialFromStdOut();
       for(int i = 0; i < res.count(); ++i) qDebug() << res[i];
+
+      QString ip = process->getDeviceIpFromStdOut();
+      qDebug() << "ip = " << ip;
     }
   });
   process->execute("", arguments);
   //process->push("", "C:\\Users\\Lenovo\\Desktop\\test.txt", "/sdcard/test.txt");
   //process->removeFile("", "/sdcard/test.txt");
-  //process->reverse("", "scrcpy", 5037);
-  //process->removeReverse("", "scrcpy");
+  //process->reverse("", "Tscrcpy", 5037);
+  //process->removeReverse("", "Tscrcpy");
 }
 
 void Widget::onAdbProcessResult(AdbProcess::ADB_EXEC_RESULT processResult){

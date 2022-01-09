@@ -29,6 +29,9 @@ public:
   void reverse(const QString& serial, const QString& deviceSocketName, qint16 localPort);
   void removeReverse(const QString& serial, const QString& deviceSocketName);
   QStringList getDeviceSerialFromStdOut();
+  QString getDeviceIpFromStdOut();
+  QString getStanddOut();
+  QString getErrorOut();
 
 private:
   void initSignals();
