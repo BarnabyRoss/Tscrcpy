@@ -15,8 +15,12 @@ SOURCES += \
 HEADERS += \
     Widget.h
 
-##添加子工程
+#添加子工程
 include($$PWD/adb/adb.pri)
+
+#添加目录
+INCLUDEPATH += \
+    $$PWD/adb
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
