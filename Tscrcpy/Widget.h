@@ -2,6 +2,7 @@
 #define __WIDGET_H__
 
 #include <QWidget>
+#include <QPushButton>
 
 class Widget : public QWidget{
 
@@ -10,5 +11,11 @@ class Widget : public QWidget{
 public:
   Widget(QWidget* parent = nullptr);
   ~Widget();
+
+protected slots:
+  void onButtonClicked();
+
+private:
+  QPushButton m_button;
 };
 #endif // __WIDGET_H__

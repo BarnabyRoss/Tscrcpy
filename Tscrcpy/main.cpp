@@ -1,5 +1,4 @@
 #include "Widget.h"
-#include "AdbProcess.h"
 
 #include <QApplication>
 
