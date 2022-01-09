@@ -26,8 +26,8 @@ void Widget::onButtonClicked(){
   connect(process, &AdbProcess::adbProcessResult, this, [this, process](AdbProcess::ADB_EXEC_RESULT processResult){
     qDebug() << ">>>>>>>>>>>" << processResult;
     if( AdbProcess::AER_SUCCESS_EXEC == processResult ){
-      QStringList res = process->getDeviceSerialFromStdOut();
-      for(int i = 0; i < res.count(); ++i) qDebug() << res[i];
+      //QStringList res = process->getDeviceSerialFromStdOut();
+      //for(int i = 0; i < res.count(); ++i) qDebug() << res[i];
 
       QString ip = process->getDeviceIpFromStdOut();
       qDebug() << "ip = " << ip;

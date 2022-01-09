@@ -30,7 +30,7 @@ public:
   void removeReverse(const QString& serial, const QString& deviceSocketName);
   QStringList getDeviceSerialFromStdOut();
   QString getDeviceIpFromStdOut();
-  QString getStanddOut();
+  QString getStandOut();
   QString getErrorOut();
 
 private:

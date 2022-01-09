@@ -108,19 +108,18 @@ QString AdbProcess::getDeviceIpFromStdOut(){
    * mtu 1500 qdisc mq state UP qlen 1000\r\r\n    inet 172.20.10.7/28 brd 172.20.10.15 scope global wlan0"
    */
   QString ip = "";
-  QString strIpExp = "inet [\\d.]*";
-  QRegExp regExp(strIpExp, Qt::CaseInsensitive);
-
-  if( regExp.indexIn(m_standardOutput) != -1 ){
-
-    ip = regExp.cap(0);
+  QString strIPExp = "inet [\\d.]*";
+  QRegExp ipRegExp(strIPExp, Qt::CaseInsensitive);
+  qDebug() << m_standardOutput;
+  if (ipRegExp.indexIn(m_standardOutput) != -1) {
+    ip = ipRegExp.cap(0);
     ip = ip.right(ip.size() - 5);
   }
 
   return ip;
 }
 
-QString AdbProcess::getStanddOut(){
+QString AdbProcess::getStandOut(){
 
   return m_standardOutput;
 }
@@ -185,6 +184,6 @@ void AdbProcess::onReadyReadStandardError(){
 
 void AdbProcess::onReadyReadStandardOutput(){
 
-  m_standardOutput = QString::fromLocal8Bit(readAllStandardOutput()).trimmed();
+  m_standardOutput = QString(readAllStandardOutput()).trimmed();
   qDebug() << m_standardOutput;
 }
