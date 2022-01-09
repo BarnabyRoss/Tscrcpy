@@ -14,12 +14,13 @@ Widget::Widget(QWidget* parent) : QWidget(parent), m_button(this){
 
 void Widget::onButtonClicked(){
 
-  QString program = "notepad";
+  QString program = "..\\Tscrcpy\\third_party\\adb\\winAdb\\adb.exe";
   QStringList arguments;
-  arguments << "C:\\Users\\Lenovo\\Desktop";
+  //arguments << "..\\";
 
   AdbProcess* process = new AdbProcess(this);
-  process->start(program, arguments);
+  //process->start(program, arguments);
+  process->start(program, nullptr);
 }
 
 Widget::~Widget(){
