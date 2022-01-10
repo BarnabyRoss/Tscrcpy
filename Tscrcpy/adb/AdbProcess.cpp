@@ -21,19 +21,18 @@ AdbProcess::AdbProcess(QObject* parent) : QProcess(parent), m_standardOutput("")
 
 const QString AdbProcess::getAdbPath(){
 
-  QString m_adbPath = "";
-  if( m_adbPath.isEmpty() ){
+  if( s_adbPath.isEmpty() ){
 
-    m_adbPath = QString::fromLocal8Bit(qgetenv("TSCRCPY_ADB_PATH"));
-    QFileInfo fileInfo(m_adbPath);
+    s_adbPath = QString::fromLocal8Bit(qgetenv("TSCRCPY_ADB_PATH"));
+    QFileInfo fileInfo(s_adbPath);
 
-    if( m_adbPath.isEmpty() || !fileInfo.isFile() ){
+    if( s_adbPath.isEmpty() || !fileInfo.isFile() ){
 
-      m_adbPath = QCoreApplication::applicationDirPath() + "/adb";
+      s_adbPath = QCoreApplication::applicationDirPath() + "/adb";
     }
   }
 
-  return m_adbPath;
+  return s_adbPath;
 }
 
 void AdbProcess::execute(const QString& serial, const QStringList& args){
