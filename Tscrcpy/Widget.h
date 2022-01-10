@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QPushButton>
 #include "AdbProcess.h"
+#include "Server.h"
 
 class Widget : public QWidget{
 
@@ -14,10 +15,13 @@ public:
   ~Widget();
 
 protected slots:
-  void onButtonClicked();
+  void onStartBtnClicked();
+  void onStopBtnClicked();
   void onAdbProcessResult(AdbProcess::ADB_EXEC_RESULT processResult);
 
 private:
-  QPushButton m_button;
+  QPushButton m_startBtn;
+  QPushButton m_stopBtn;
+  Server m_server;
 };
 #endif // __WIDGET_H__

@@ -28,7 +28,7 @@ const QString AdbProcess::getAdbPath(){
 
     if( s_adbPath.isEmpty() || !fileInfo.isFile() ){
 
-      s_adbPath = QCoreApplication::applicationDirPath() + "/adb";
+      s_adbPath = QCoreApplication::applicationDirPath() + "/adb.exe";
     }
   }
 

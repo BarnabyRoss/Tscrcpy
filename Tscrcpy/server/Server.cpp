@@ -5,7 +5,7 @@
 #include <QDebug>
 #include "Server.h"
 
-#define DEVICE_SERVER_PATH "data/local/tmp/scrcpy-server.jar"
+#define DEVICE_SERVER_PATH "/data/local/tmp/scrcpy-server.jar"
 #define SOCKET_NAME "scrcpy"
 
 Server::Server(QObject* parent) : QObject(parent),
@@ -16,8 +16,8 @@ Server::Server(QObject* parent) : QObject(parent),
   this->m_serverCopiedToDevice = false;
   this->m_enableReverse = false;
 
-  connect(&m_workProcess, SIGNAL(AdbProcess::adbProcessResult(AdbProcess::ADB_EXEC_RESULT)), this, SLOT(onAdbProcessResult(AdbProcess::ADB_EXEC_RESULT)));
-  connect(&m_serverProcess, SIGNAL(AdbProcess::adbProcessResult(AdbProcess::ADB_EXEC_RESULT)), this, SLOT(onAdbProcessResult((AdbProcess::ADB_EXEC_RESULT))));
+  connect(&m_workProcess, &AdbProcess::adbProcessResult, this, &Server::onAdbProcessResult);
+  connect(&m_serverProcess, &AdbProcess::adbProcessResult, this, &Server::onAdbProcessResult);
   connect(&m_serverSocket, &QTcpServer::newConnection, this, [this](){
 
     QString deviceName;
@@ -69,7 +69,7 @@ QString Server::getServerPath(){
 
   if( m_serverPath.isEmpty() ){
 
-    m_serverPath = QString::fromLocal8Bit(qgetenv("TSCRCPY-SERVER-PATH"));
+    m_serverPath = QString::fromLocal8Bit(qgetenv("TSCRCPY_SERVER_PATH"));
     QFileInfo fileInfo(m_serverPath);
     if( m_serverPath.isEmpty() || !fileInfo.isFile() ){
 
@@ -170,9 +170,6 @@ bool Server::startServerByStep(){
           emit serverStartResult(false);
           return false;
         }
-        ret = executeServer();
-        break;
-      case SSS_RUNNING:
         ret = executeServer();
         break;
       default:
