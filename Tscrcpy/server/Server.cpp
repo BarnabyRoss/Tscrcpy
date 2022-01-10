@@ -254,7 +254,7 @@ bool Server::executeServer(){
 //adb shell CLASSPATH=/data/local/tmp/scrcpy-server.jar app_process /com.genymobile.scrcpy.Server 1080 20000 false
   QStringList args;
   args << "shell" << QString("CLASSPATH=%1").arg(DEVICE_SERVER_PATH);
-  args << "/" << "com.genymobile.scrcpy.Server";
+  args << "app_process" << "/" << "com.genymobile.scrcpy.Server";
   args << QString::number(m_maxSize) << QString::number(m_bitRate) << "false" << "";
 
   m_serverProcess.execute(m_serial, args);
