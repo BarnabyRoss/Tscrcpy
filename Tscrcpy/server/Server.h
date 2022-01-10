@@ -3,6 +3,8 @@
 
 #include <QObject>
 #include <QString>
+#include <QTcpSocket>
+#include <QTcpServer>
 #include "AdbProcess.h"
 
 class Server : public QObject{
@@ -23,11 +25,13 @@ public:
   Server(QObject* parent = nullptr);
 
   bool start(const QString& serial, quint16 localPort, quint16 maxSize, quint32 bitRate);
+  void stop();
 
   QString getServerPath();
 
 signals:
   void serverStartResult(bool success); //server执行成功还是失败
+  void connectToResult(bool success, const QString& deviceName, const QSize& size);
 
 protected slots:
   void onAdbProcessResult(AdbProcess::ADB_EXEC_RESULT processResult);
@@ -53,6 +57,9 @@ private:
   QString m_serverPath;
   bool m_serverCopiedToDevice;
   bool m_enableReverse;
+
+  QTcpServer m_serverSocket;
+  QTcpSocket* m_deviceSocket;
 };
 
 #endif // __SERVER_H__

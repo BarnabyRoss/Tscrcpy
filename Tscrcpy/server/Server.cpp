@@ -1,5 +1,7 @@
 #include <QFileInfo>
 #include <QCoreApplication>
+#include <QHostAddress>
+#include <QSize>
 #include <QDebug>
 #include "Server.h"
 
@@ -7,7 +9,7 @@
 #define SOCKET_NAME "scrcpy"
 
 Server::Server(QObject* parent) : QObject(parent),
-  m_serial(""), m_localPort(0), m_maxSize(0), m_bitRate(0){
+  m_serial(""), m_localPort(0), m_maxSize(0), m_bitRate(0), m_deviceSocket(nullptr){
 
   this->m_serverStartStep = SSS_NULL;
   this->m_serverPath = "";
@@ -16,6 +18,24 @@ Server::Server(QObject* parent) : QObject(parent),
 
   connect(&m_workProcess, SIGNAL(AdbProcess::adbProcessResult(AdbProcess::ADB_EXEC_RESULT)), this, SLOT(onAdbProcessResult(AdbProcess::ADB_EXEC_RESULT)));
   connect(&m_serverProcess, SIGNAL(AdbProcess::adbProcessResult(AdbProcess::ADB_EXEC_RESULT)), this, SLOT(onAdbProcessResult((AdbProcess::ADB_EXEC_RESULT))));
+  connect(&m_serverSocket, &QTcpServer::newConnection, this, [this](){
+
+    QString deviceName;
+    QSize deviceSize;
+    //device name, device size
+    m_deviceSocket = m_serverSocket.nextPendingConnection();
+    if( m_deviceSocket != nullptr && m_deviceSocket->isValid() ){
+
+      disableTunnelReverse();
+      removeServer();
+      emit connectToResult(true, deviceName, deviceSize);
+
+    }else{
+
+      emit connectToResult(false, deviceName, deviceSize);
+      stop();
+    }
+  });
 }
 
 bool Server::start(const QString& serial, quint16 localPort, quint16 maxSize, quint32 bitRate){
@@ -29,6 +49,20 @@ bool Server::start(const QString& serial, quint16 localPort, quint16 maxSize, qu
   m_serverStartStep = SSS_PUSH;
 
   return startServerByStep();
+}
+
+void Server::stop(){
+
+  if( m_deviceSocket != nullptr ){
+
+    m_deviceSocket->close();
+  }
+
+  m_serverProcess.kill();
+  disableTunnelReverse();
+  removeServer();
+
+  m_serverSocket.close();
 }
 
 QString Server::getServerPath(){
@@ -126,6 +160,16 @@ bool Server::startServerByStep(){
         ret = enableTunnelReverse();
         break;
       case SSSS_EXECUTE_SERVER:
+        //监听本地代理端口
+        m_serverSocket.setMaxPendingConnections(1);
+        if( !m_serverSocket.listen(QHostAddress::LocalHost, m_localPort) ){
+          qCritical() << "Could not listen to port " << m_localPort;
+          m_serverStartStep = SSS_NULL;
+          disableTunnelReverse();
+          removeServer();
+          emit serverStartResult(false);
+          return false;
+        }
         ret = executeServer();
         break;
       case SSS_RUNNING:
