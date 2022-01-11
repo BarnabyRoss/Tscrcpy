@@ -24,6 +24,10 @@ qint32 DeviceSocket::subThreadRecvData(quint8* buffer, quint32 bufferSize){
   m_bufferSize = bufferSize;
   m_dataSize = 0;
 
+  //发送自定义事件
+  DeviceSocketEvent* getDataEvent = new DeviceSocketEvent();
+  QCoreApplication::postEvent(this, getDataEvent);
+
   while( !m_recvData ){
 
     m_recvDataCond.wait(&m_mutex);
@@ -32,6 +36,17 @@ qint32 DeviceSocket::subThreadRecvData(quint8* buffer, quint32 bufferSize){
   m_recvData = false;
 
   return m_dataSize; //返回实际收到的数据
+}
+
+bool DeviceSocket::event(QEvent* evt){
+
+  if( evt->type() == TScrcpyEvent::DeviceSocket ){
+
+    onReadyRead();
+    return true;
+  }
+
+  return QTcpSocket::event(evt);
 }
 
 void DeviceSocket::onReadyRead(){

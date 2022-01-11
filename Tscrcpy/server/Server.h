@@ -6,6 +6,8 @@
 #include <QTcpSocket>
 #include <QTcpServer>
 #include "AdbProcess.h"
+#include "DeviceSocket.h"
+#include "MyTcpServer.h"
 
 class Server : public QObject{
 
@@ -59,8 +61,8 @@ private:
   bool m_serverCopiedToDevice;
   bool m_enableReverse;
 
-  QTcpServer m_serverSocket;
-  QTcpSocket* m_deviceSocket;
+  MyTcpServer m_serverSocket;
+  DeviceSocket* m_deviceSocket;
 };
 
 #endif // __SERVER_H__

@@ -4,6 +4,8 @@
 #include <QTcpSocket>
 #include <QWaitCondition>
 #include <QMutex>
+#include <QEvent>
+#include "TscrcpyEvent.h"
 
 class DeviceSocket : public QTcpSocket{
 
@@ -11,6 +13,8 @@ public:
   explicit DeviceSocket(QObject* parent = nullptr);
 
   qint32 subThreadRecvData(quint8* buffer, quint32 bufferSize);
+
+  bool event(QEvent* evt);
 
   ~DeviceSocket();
 

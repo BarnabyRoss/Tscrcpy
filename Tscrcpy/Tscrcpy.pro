@@ -20,6 +20,7 @@ HEADERS += \
 include($$PWD/adb/adb.pri)
 include($$PWD/server/server.pri)
 include($$PWD/decoder/decoder.pri)
+include($$PWD/common/common.pri)
 
 #添加依赖的外部库
 LIBS += \
@@ -34,6 +35,7 @@ INCLUDEPATH +=                                \
     $$PWD/server                              \
     $$PWD/decoder                             \
     $$PWD/third_party/ffmpeg/include          \
+    $$PWD/common                              \
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
