@@ -24,7 +24,7 @@ include($$PWD/decoder/decoder.pri)
 #添加依赖的外部库
 LIBS += \
     -L$$PWD/third_party/ffmpeg/lib -lavformat \
-    -L$$PWD/third_party/ffmpeg/lib -lavcode   \
+    -L$$PWD/third_party/ffmpeg/lib -lavcodec   \
     -L$$PWD/third_party/ffmpeg/lib -lavutil   \
     -L$$PWD/third_party/ffmpeg/lib -lswscale  \
 
