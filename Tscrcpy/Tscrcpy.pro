@@ -19,11 +19,21 @@ HEADERS += \
 #添加子模块
 include($$PWD/adb/adb.pri)
 include($$PWD/server/server.pri)
+include($$PWD/decoder/decoder.pri)
+
+#添加依赖的外部库
+LIBS += \
+    -L$$PWD/third_party/ffmpeg/lib -lavformat \
+    -L$$PWD/third_party/ffmpeg/lib -lavcode   \
+    -L$$PWD/third_party/ffmpeg/lib -lavutil   \
+    -L$$PWD/third_party/ffmpeg/lib -lswscale  \
 
 #添加目录
-INCLUDEPATH +=              \
-    $$PWD/adb               \
-    $$PWD/server            \
+INCLUDEPATH +=                                \
+    $$PWD/adb                                 \
+    $$PWD/server                              \
+    $$PWD/decoder                             \
+    $$PWD/third_party/ffmpeg/include          \
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -19,7 +19,7 @@ Widget::Widget(QWidget* parent) : QWidget(parent), m_startBtn(this), m_stopBtn(t
     qDebug() << "server start success : " << success;
   });
   connect(&m_server, &Server::connectToResult, this, [this](bool success, const QString& deviceName, const QSize& size){
-    qDebug() << "connect to success : " << success;
+    qDebug() << "connect to success : " << success << deviceName << size;
   });
 
   this->resize(400, 280);

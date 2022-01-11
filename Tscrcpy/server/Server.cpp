@@ -25,7 +25,7 @@ Server::Server(QObject* parent) : QObject(parent),
     QSize deviceSize;
     //device name, device size
     m_deviceSocket = m_serverSocket.nextPendingConnection();
-    if( m_deviceSocket != nullptr && m_deviceSocket->isValid() ){
+    if( m_deviceSocket != nullptr && m_deviceSocket->isValid() && readInfo(deviceName, deviceSize) ){
 
       disableTunnelReverse();
       removeServer();
