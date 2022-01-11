@@ -43,6 +43,7 @@ private:
   bool disableTunnelReverse();
   bool removeServer();
   bool executeServer();
+  bool readInfo(QString& deviceName, QSize size);
 
 private:
   QString m_serial;

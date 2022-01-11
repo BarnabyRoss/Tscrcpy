@@ -7,6 +7,7 @@
 
 #define DEVICE_SERVER_PATH "/data/local/tmp/scrcpy-server.jar"
 #define SOCKET_NAME "scrcpy"
+#define DEVICE_NAME_FIELD_LENGTH 64
 
 Server::Server(QObject* parent) : QObject(parent),
   m_serial(""), m_localPort(0), m_maxSize(0), m_bitRate(0), m_deviceSocket(nullptr){
@@ -255,6 +256,28 @@ bool Server::executeServer(){
   args << QString::number(m_maxSize) << QString::number(m_bitRate) << "false" << "";
 
   m_serverProcess.execute(m_serial, args);
+
+  return true;
+}
+
+bool Server::readInfo(QString& deviceName, QSize size){
+
+  // abk001-----------------------0x0438 0x02d0
+  //               64b            2b w   2b h  //前64字节代表设备名称，后2个字节代表设备宽，最后两字节设备的高
+  unsigned char buf[DEVICE_NAME_FIELD_LENGTH + 4];
+  if (m_deviceSocket->bytesAvailable() <= (DEVICE_NAME_FIELD_LENGTH + 4)) {
+      m_deviceSocket->waitForReadyRead(300);
+  }
+
+  qint64 len = m_deviceSocket->read((char*)buf, sizeof(buf));
+  if (len < DEVICE_NAME_FIELD_LENGTH + 4) {
+      qInfo("Could not retrieve device information");
+      return false;
+  }
+  buf[DEVICE_NAME_FIELD_LENGTH - 1] = '\0';
+  deviceName = (char*)buf;
+  size.setWidth((buf[DEVICE_NAME_FIELD_LENGTH] << 8) | buf[DEVICE_NAME_FIELD_LENGTH + 1]);
+  size.setHeight((buf[DEVICE_NAME_FIELD_LENGTH + 2] << 8) | buf[DEVICE_NAME_FIELD_LENGTH + 3]);
 
   return true;
 }

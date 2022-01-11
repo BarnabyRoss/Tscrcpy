@@ -158,7 +158,7 @@ void AdbProcess::onStarted(){
 
 void AdbProcess::onErrorOccurred(QProcess::ProcessError error){
 
-  qDebug() << error;
+  qDebug() << "QProcess::ProcessError : " << error;
 }
 
 void AdbProcess::onFinished(int exitCode, QProcess::ExitStatus exitStatus){
@@ -178,11 +178,11 @@ void AdbProcess::onFinished(int exitCode, QProcess::ExitStatus exitStatus){
 void AdbProcess::onReadyReadStandardError(){
 
   m_errorOutput = QString::fromLocal8Bit(readAllStandardError()).trimmed();
-  qDebug() << m_errorOutput;
+  qDebug() << "readAllStandardError() : " << m_errorOutput;
 }
 
 void AdbProcess::onReadyReadStandardOutput(){
 
   m_standardOutput = QString(readAllStandardOutput()).trimmed();
-  qDebug() << m_standardOutput;
+  qDebug() << "readAllStandardOutput() : " << m_standardOutput;
 }
