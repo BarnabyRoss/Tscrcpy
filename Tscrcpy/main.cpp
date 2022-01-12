@@ -6,6 +6,7 @@ int main(int argc, char *argv[]){
 
   QApplication a(argc, argv);
   Widget w;
+  int ret = -1;
 
   qputenv("TSCRCPY_ADB_PATH", "..\\Tscrcpy\\third_party\\adb\\winAdb\\adb.exe");
   qputenv("TSCRCPY_SERVER_PATH", "..\\Tscrcpy\\third_party\\scrcpy-server.jar");
@@ -14,5 +15,9 @@ int main(int argc, char *argv[]){
 
   w.show();
 
-  return a.exec();
+  ret = a.exec();
+
+  Decoder::deInit();
+
+  return ret;
 }
