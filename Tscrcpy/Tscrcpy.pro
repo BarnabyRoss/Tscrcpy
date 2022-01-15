@@ -23,13 +23,7 @@ include($$PWD/decoder/decoder.pri)
 include($$PWD/common/common.pri)
 include($$PWD/render/render.pri)
 include($$PWD/android/android.pri)
-
-#添加依赖的外部库
-LIBS += \
-    -L$$PWD/third_party/ffmpeg/lib -lavformat \
-    -L$$PWD/third_party/ffmpeg/lib -lavcodec   \
-    -L$$PWD/third_party/ffmpeg/lib -lavutil   \
-    -L$$PWD/third_party/ffmpeg/lib -lswscale  \
+include($$PWD/inputControl/inputControl.pri)
 
 #添加目录
 INCLUDEPATH +=                                \
@@ -40,6 +34,15 @@ INCLUDEPATH +=                                \
     $$PWD/common                              \
     $$PWD/render                              \
     $$PWD/android                             \
+    $$PWD/inputControl                        \
+
+#添加依赖的外部库
+LIBS +=                                        \
+    -L$$PWD/third_party/ffmpeg/lib -lavformat  \
+    -L$$PWD/third_party/ffmpeg/lib -lavcodec   \
+    -L$$PWD/third_party/ffmpeg/lib -lavutil    \
+    -L$$PWD/third_party/ffmpeg/lib -lswscale   \
+
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
