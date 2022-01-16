@@ -7,8 +7,10 @@
 #include <QBuffer>
 #include "input.h"
 #include "keycodes.h"
+#include "TscrcpyEvent.h"
 
-class ControlEvent{
+class TScrcpyEvent;
+class ControlEvent : public TScrcpyEvent{
 
 public:
   enum ControlEventType{

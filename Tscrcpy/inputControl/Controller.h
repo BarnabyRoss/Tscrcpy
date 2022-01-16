@@ -2,6 +2,11 @@
 #define __CONTROLLER_H__
 
 #include <QObject>
+#include <QPointer>
+
+
+class DeviceSocket;
+class ControlEvent;
 
 class Controller : public QObject{
 
@@ -9,7 +14,15 @@ class Controller : public QObject{
 public:
   explicit Controller(QObject* parent = nullptr);
 
-signals:
+  void setDeviceSocket(DeviceSocket* deviceSoket);
+  bool sendControl(QByteArray& byteArray);
+  void postControlEvent(ControlEvent* controlEvent);
+
+protected:
+  bool event(QEvent* evt);
+
+private:
+  QPointer<DeviceSocket> m_deviceSocket;
 
 };
 

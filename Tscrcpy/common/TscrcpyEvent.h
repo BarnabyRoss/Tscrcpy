@@ -2,6 +2,7 @@
 #define __TSCRCPYEVENT_H__
 
 #include <QEvent>
+#include "ControlEvent.h"
 
 class TScrcpyEvent : public QEvent{
 
@@ -9,6 +10,7 @@ public:
   enum Type{
 
     DeviceSocket = QEvent::User + 1,
+
   };
 
 public:

@@ -2,7 +2,7 @@
 #include <QIODevice>
 #include "ControlEvent.h"
 
-ControlEvent::ControlEvent(ControlEventType type){
+ControlEvent::ControlEvent(ControlEventType type) : TScrcpyEvent(Control){
 
   m_data.type = type;
 }
